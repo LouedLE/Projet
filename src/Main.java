@@ -1,15 +1,24 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+import model.Morceau;
+import model.Album;
+import model.Artiste;
+import model.Groupe;
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+        // Création des objets
+        Morceau morceau = new Morceau(1, "Shape of You", 3.5, "Pop");
+        Album album = new Album(1, "Divide", 2017);
+        Artiste artiste = new Artiste(1, "Ed Sheeran");
+        Groupe groupe = new Groupe(1, "Imagine Dragons");
+
+        // Affichage des objets
+        System.out.println(morceau);
+        System.out.println(album);
+        System.out.println(artiste);
+        System.out.println(groupe);
+
+        // Test de la méthode lireExtrait()
+        morceau.lireExtrait();
     }
 }
