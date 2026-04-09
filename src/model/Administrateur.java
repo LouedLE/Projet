@@ -1,4 +1,5 @@
 package model;
 
-public class Administrateur {
+public class Administrateur extends Utilisateur {
+
 }

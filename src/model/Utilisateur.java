@@ -1,4 +1,7 @@
 package model;
 
-public class Utilisateur {
+import java.io.Serializable;
+
+public abstract class Utilisateur implements Serializable {
+
 }

@@ -1,4 +1,7 @@
 package model;
 
-public class Abonne {
+import java.util.ArrayList;
+
+public class Abonne extends Utilisateur {
+
 }

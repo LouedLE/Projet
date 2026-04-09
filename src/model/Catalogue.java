@@ -3,6 +3,6 @@ package model;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Playlist implements Serializable {
+public class Catalogue implements Serializable {
 
 }

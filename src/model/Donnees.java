@@ -2,6 +2,6 @@ package model;
 
 import java.io.Serializable;
 
-public class Morceau implements Serializable {
+public class Donnees implements Serializable {
 
 }
