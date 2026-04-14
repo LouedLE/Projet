@@ -3,12 +3,21 @@ package model;
 import java.io.Serializable;
 
 public class Avis implements Serializable {
+
+    private int auteurId;
+    private String auteurNom;
     private int note;
     private String commentaire;
 
-    public Avis(int note, String commentaire) {
+    public Avis(Abonne auteur, int note, String commentaire) {
+        this.auteurId = auteur.getId();
+        this.auteurNom = auteur.getNomUtilisateur();
         this.note = note;
         this.commentaire = commentaire;
+    }
+
+    public int getAuteurId() {
+        return auteurId;
     }
 
     public int getNote() {
@@ -29,6 +38,6 @@ public class Avis implements Serializable {
 
     @Override
     public String toString() {
-        return "Avis{note=" + note + ", commentaire='" + commentaire + "'}";
+        return auteurNom + " | Note: " + note + " | " + commentaire;
     }
 }

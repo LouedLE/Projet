@@ -43,9 +43,31 @@ public class Abonne extends Utilisateur implements Serializable {
     }
 
     public void ecouterMorceau(Morceau m) {
-        historique.ajouterEcoute(m);
-        System.out.println("Lecture du morceau : " + m.getTitre());
+        if (m != null) {
+            historique.ajouterEcoute(m);
+            m.incrementerEcoutes();
+            System.out.println("Lecture du morceau : " + m.getTitre());
+        }
     }
+
+    public void renommerPlaylist(Playlist playlist, String nouveauNom) {
+        if (playlist != null) {
+            playlist.renommer(nouveauNom);
+        }
+    }
+
+    public void ajouterMorceauAPlaylist(Playlist playlist, Morceau morceau) {
+        if (playlist != null && morceau != null) {
+            playlist.ajouterMorceau(morceau);
+        }
+    }
+
+    public void retirerMorceauDePlaylist(Playlist playlist, Morceau morceau) {
+        if (playlist != null && morceau != null) {
+            playlist.retirerMorceau(morceau);
+        }
+    }
+
 
     @Override
     public String toString() {

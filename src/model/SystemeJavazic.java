@@ -115,6 +115,27 @@ public class SystemeJavazic implements Serializable {
         }
     }
 
+    public int getNombreTotalEcoutes() {
+        int total = 0;
+        for (Morceau m : catalogue.getMorceaux()) {
+            total += m.getNombreEcoutes();
+        }
+        return total;
+    }
+
+    public int getNombreUtilisateurs() {
+        return abonnes.size() + administrateurs.size();
+    }
+
+    public Abonne rechercherAbonneParNomUtilisateur(String nomUtilisateur) {
+        for (Abonne a : abonnes) {
+            if (a.getNomUtilisateur().equalsIgnoreCase(nomUtilisateur)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "SystemeJavazic{abonnes=" + abonnes.size() +
