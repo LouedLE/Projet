@@ -5,18 +5,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Morceau implements Serializable {
+
     private int id;
     private String titre;
     private double duree;
     private String genre;
     private int nombreEcoutes;
+
+    private Artiste artiste;
+    private Groupe groupe;
+
     private List<Avis> avis = new ArrayList<>();
 
-    public Morceau(int id, String titre, double duree, String genre) {
+    public Morceau(int id, String titre, double duree, String genre, Artiste artiste) {
         this.id = id;
         this.titre = titre;
         this.duree = duree;
         this.genre = genre;
+        this.artiste = artiste;
+        this.groupe = null;
+        this.nombreEcoutes = 0;
+    }
+
+    public Morceau(int id, String titre, double duree, String genre, Groupe groupe) {
+        this.id = id;
+        this.titre = titre;
+        this.duree = duree;
+        this.genre = genre;
+        this.groupe = groupe;
+        this.artiste = null;
         this.nombreEcoutes = 0;
     }
 
@@ -56,53 +73,45 @@ public class Morceau implements Serializable {
         this.nombreEcoutes++;
     }
 
-    public void ajouterOuModifierAvis(Abonne abonne, int note, String commentaire) {
-
-        for (Avis a : avis) {
-            if (a.getAuteurId() == abonne.getId()) {
-                a.setNote(note);
-                a.setCommentaire(commentaire);
-                System.out.println("Avis modifié !");
-                return;
-            }
-        }
-
-        avis.add(new Avis(abonne, note, commentaire));
-        System.out.println("Avis ajouté !");
+    public Artiste getArtiste() {
+        return artiste;
     }
 
-    public void supprimerAvis(Abonne abonne) {
-
-        boolean removed = avis.removeIf(a -> a.getAuteurId() == abonne.getId());
-
-        if (removed) {
-            System.out.println("Avis supprimé !");
-        } else {
-            System.out.println("Aucun avis à supprimer");
-        }
+    public Groupe getGroupe() {
+        return groupe;
     }
 
-    public void afficherAvis() {
-
-        if (avis.isEmpty()) {
-            System.out.println("Aucun avis pour ce morceau");
-            return;
+    public String getNomInterprete() {
+        if (artiste != null) {
+            return artiste.getNom();
         }
-
-        System.out.println("Avis du morceau :");
-
-        for (Avis a : avis) {
-            System.out.println(a);
+        if (groupe != null) {
+            return groupe.getNom();
         }
+        return "Inconnu";
     }
 
     public List<Avis> getAvis() {
         return avis;
     }
 
+    public void ajouterOuModifierAvis(Abonne abonne, int note, String commentaire) {
+        for (Avis a : avis) {
+            if (a.getAuteurId() == abonne.getId()) {
+                a.setNote(note);
+                a.setCommentaire(commentaire);
+                return;
+            }
+        }
+        avis.add(new Avis(abonne, note, commentaire));
+    }
+
+    public void supprimerAvis(Abonne abonne) {
+        avis.removeIf(a -> a.getAuteurId() == abonne.getId());
+    }
+
     @Override
     public String toString() {
-        return "Morceau{id=" + id + ", titre='" + titre + "', duree=" + duree
-                + ", genre='" + genre + "', ecoutes=" + nombreEcoutes + "}";
+        return "Morceau{id=" + id + ", titre='" + titre + '\'' + ", duree=" + duree + ", genre='" + genre + '\'' + ", interprete='" + getNomInterprete() + '\'' + ", ecoutes=" + nombreEcoutes + '}';
     }
 }

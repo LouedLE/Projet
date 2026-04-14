@@ -159,26 +159,20 @@ public class JavazicController {
         return morceau.getAvis();
     }
 
-    public boolean ajouterMorceau(String titre, double duree, String genre) {
-        if (titre == null || titre.isBlank() || genre == null || genre.isBlank() || duree <= 0) {
-            return false;
-        }
-
-        Morceau morceau = new Morceau(
-                systeme.getCatalogue().getMorceaux().size() + 1,
-                titre,
-                duree,
-                genre
-        );
-        systeme.getCatalogue().ajouterMorceau(morceau);
-        return true;
-    }
-
     public boolean supprimerMorceau(String titre) {
         Morceau morceau = rechercherMorceau(titre);
         if (morceau == null) {
             return false;
         }
+
+        if (morceau.getArtiste() != null) {
+            morceau.getArtiste().retirerMorceau(morceau);
+        }
+
+        if (morceau.getGroupe() != null) {
+            morceau.getGroupe().retirerMorceau(morceau);
+        }
+
         systeme.getCatalogue().supprimerMorceau(morceau);
         return true;
     }
@@ -299,6 +293,90 @@ public class JavazicController {
             if (playlist.getNom().equalsIgnoreCase(nomPlaylist)) {
                 return playlist;
             }
+        }
+        return null;
+    }
+
+    public List<Playlist> getPlaylistsAbonne(Abonne abonne) {
+        return abonne.getPlaylists();
+    }
+
+    public List<Morceau> getHistoriqueAbonne(Abonne abonne) {
+        return abonne.getHistorique().getMorceauxEcoutes();
+    }
+
+    public boolean ajouterMorceauAvecArtiste(String titre, double duree, String genre, String nomArtiste) {
+        if (titre == null || titre.isBlank() || genre == null || genre.isBlank() || nomArtiste == null || nomArtiste.isBlank() || duree <= 0) {
+            return false;
+        }
+
+        Artiste artiste = systeme.getCatalogue().rechercherArtisteParNom(nomArtiste);
+        if (artiste == null) {
+            return false;
+        }
+
+        Morceau morceau = new Morceau(
+                systeme.getCatalogue().getMorceaux().size() + 1,
+                titre,
+                duree,
+                genre,
+                artiste
+        );
+
+        systeme.getCatalogue().ajouterMorceau(morceau);
+        artiste.ajouterMorceau(morceau);
+        return true;
+    }
+
+    public boolean ajouterMorceauAvecGroupe(String titre, double duree, String genre, String nomGroupe) {
+        if (titre == null || titre.isBlank() || genre == null || genre.isBlank() || nomGroupe == null || nomGroupe.isBlank() || duree <= 0) {
+            return false;
+        }
+
+        Groupe groupe = systeme.getCatalogue().rechercherGroupeParNom(nomGroupe);
+        if (groupe == null) {
+            return false;
+        }
+
+        Morceau morceau = new Morceau(
+                systeme.getCatalogue().getMorceaux().size() + 1,
+                titre,
+                duree,
+                genre,
+                groupe
+        );
+
+        systeme.getCatalogue().ajouterMorceau(morceau);
+        groupe.ajouterMorceau(morceau);
+        return true;
+    }
+
+    public List<Morceau> getMorceauxParGroupe(String nom) {
+        return systeme.getCatalogue().rechercherMorceauxParGroupe(nom);
+    }
+
+    public List<Morceau> getMorceauxParArtiste(String nom) {
+        return systeme.getCatalogue().rechercherMorceauxParArtiste(nom);
+    }
+
+    public String getNomInterpreteDuMorceau(String titreMorceau) {
+        Morceau morceau = rechercherMorceau(titreMorceau);
+        if (morceau == null) {
+            return null;
+        }
+        return morceau.getNomInterprete();
+    }
+
+    public String getTypeInterpreteDuMorceau(String titreMorceau) {
+        Morceau morceau = rechercherMorceau(titreMorceau);
+        if (morceau == null) {
+            return null;
+        }
+        if (morceau.getArtiste() != null) {
+            return "artiste";
+        }
+        if (morceau.getGroupe() != null) {
+            return "groupe";
         }
         return null;
     }

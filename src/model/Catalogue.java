@@ -109,6 +109,23 @@ public class Catalogue implements Serializable {
         return null;
     }
 
+    public List<Morceau> rechercherMorceauxParArtiste(String nomArtiste) {
+        Artiste artiste = rechercherArtisteParNom(nomArtiste);
+        if (artiste != null) {
+            return artiste.getMorceaux();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Morceau> rechercherMorceauxParGroupe(String nomGroupe) {
+        Groupe groupe = rechercherGroupeParNom(nomGroupe);
+        if (groupe != null) {
+            return groupe.getMorceaux();
+        }
+        return new ArrayList<>();
+    }
+
+
     @Override
     public String toString() {
         return "Catalogue{morceaux=" + morceaux.size() +  ", albums=" + albums.size() +  ", artistes=" + artistes.size() +  ", groupes=" + groupes.size() + "}";

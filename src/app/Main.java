@@ -6,11 +6,15 @@ import model.*;
 import java.util.List;
 import java.util.Scanner;
 
+import view.MainFrame;
+
 public class Main {
 
     public static void main(String[] args) {
         SystemeJavazic systeme = SystemeJavazic.charger("sauvegarde.dat");
         JavazicController controller = new JavazicController(systeme);
+
+        new MainFrame(controller);
 
         controller.initialiserAdminParDefaut();
 
@@ -166,7 +170,10 @@ public class Main {
             System.out.println("10. Noter ou modifier un avis");
             System.out.println("11. Supprimer mon avis");
             System.out.println("12. Voir les avis d'un morceau");
-            System.out.println("13. Retour");
+            System.out.println("13. Voir l'interprète d’un morceau");
+            System.out.println("14. Voir les morceaux d’un artiste");
+            System.out.println("15. Voir les morceaux d’un groupe");
+            System.out.println("16. Retour");
             System.out.print("Choix : ");
 
             int choix = lireEntier(scanner);
@@ -306,6 +313,49 @@ public class Main {
                     break;
 
                 case 13:
+                    System.out.print("Titre du morceau : ");
+                    String titre = scanner.nextLine();
+
+                    Morceau m = controller.rechercherMorceau(titre);
+
+                    if (m == null) {
+                        System.out.println("Morceau introuvable.");
+                    } else {
+                        System.out.println("Interprète : " + m.getNomInterprete());
+                    }
+                    break;
+
+                case 14:
+                    System.out.print("Nom de l'artiste : ");
+                    String nomArtiste = scanner.nextLine();
+
+                    List<Morceau> morceaux = controller.getMorceauxParArtiste(nomArtiste);
+
+                    if (morceaux.isEmpty()) {
+                        System.out.println("Aucun morceau trouvé.");
+                    } else {
+                        for (Morceau morceau : morceaux) {
+                            System.out.println(morceau);
+                        }
+                    }
+                    break;
+
+                case 15:
+                    System.out.print("Nom du groupe : ");
+                    String nomGroupe = scanner.nextLine();
+
+                    List<Morceau> morceauxG = controller.getMorceauxParGroupe(nomGroupe);
+
+                    if (morceauxG.isEmpty()) {
+                        System.out.println("Aucun morceau trouvé.");
+                    } else {
+                        for (Morceau morceau : morceauxG) {
+                            System.out.println(morceau);
+                        }
+                    }
+                    break;
+
+                case 16:
                     retour = true;
                     break;
 
@@ -347,10 +397,24 @@ public class Main {
                     System.out.print("Genre : ");
                     String genre = scanner.nextLine();
 
-                    if (controller.ajouterMorceau(titre, duree, genre)) {
+                    System.out.print("Type (artiste/groupe) : ");
+                    String type = scanner.nextLine();
+
+                    System.out.print("Nom de l'interprète : ");
+                    String nom = scanner.nextLine();
+
+                    boolean ok = false;
+
+                    if ("artiste".equalsIgnoreCase(type)) {
+                        ok = controller.ajouterMorceauAvecArtiste(titre, duree, genre, nom);
+                    } else if ("groupe".equalsIgnoreCase(type)) {
+                        ok = controller.ajouterMorceauAvecGroupe(titre, duree, genre, nom);
+                    }
+
+                    if (ok) {
                         System.out.println("Morceau ajouté.");
                     } else {
-                        System.out.println("Impossible d'ajouter le morceau.");
+                        System.out.println("Erreur : artiste/groupe introuvable.");
                     }
                     break;
 
