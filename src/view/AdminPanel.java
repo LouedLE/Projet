@@ -2,6 +2,7 @@ package view;
 
 import controller.JavazicController;
 import model.Administrateur;
+import model.Album;
 import model.Morceau;
 
 import javax.swing.*;
@@ -27,7 +28,7 @@ public class AdminPanel extends JPanel {
         add(title, BorderLayout.NORTH);
 
         JPanel top = new JPanel(new FlowLayout());
-        top.add(new JLabel("Titre du morceau :"));
+        top.add(new JLabel("Titre :"));
         champTitre = new JTextField(20);
         top.add(champTitre);
         add(top, BorderLayout.BEFORE_FIRST_LINE);
@@ -36,46 +37,147 @@ public class AdminPanel extends JPanel {
         area.setEditable(false);
         add(new JScrollPane(area), BorderLayout.CENTER);
 
-        JPanel buttons = new JPanel(new GridLayout(4, 3, 8, 8));
+        JPanel buttons = new JPanel(new GridLayout(5, 3, 8, 8));
 
-        JButton btnAfficher = new JButton("Voir catalogue");
-        JButton btnAjouter = new JButton("Ajouter morceau");
-        JButton btnSupprimer = new JButton("Supprimer morceau");
+        JButton btnAfficherCatalogue = new JButton("Voir catalogue");
+        JButton btnAfficherAlbums = new JButton("Voir albums");
         JButton btnAjouterArtiste = new JButton("Ajouter artiste");
-        JButton btnSupprimerArtiste = new JButton("Supprimer artiste");
         JButton btnAjouterGroupe = new JButton("Ajouter groupe");
+        JButton btnAjouterAlbum = new JButton("Ajouter album");
+        JButton btnAjouterMorceau = new JButton("Ajouter morceau");
+        JButton btnSupprimerMorceau = new JButton("Supprimer morceau");
+        JButton btnSupprimerAlbum = new JButton("Supprimer album");
+        JButton btnSupprimerArtiste = new JButton("Supprimer artiste");
         JButton btnSupprimerGroupe = new JButton("Supprimer groupe");
-        JButton btnSuspendre = new JButton("Suspendre abonné");
+        JButton btnSuspendreAbonne = new JButton("Suspendre abonné");
         JButton btnSupprimerAbonne = new JButton("Supprimer abonné");
         JButton btnStats = new JButton("Statistiques");
         JButton btnLogout = new JButton("Déconnexion");
 
-        buttons.add(btnAfficher);
-        buttons.add(btnAjouter);
-        buttons.add(btnSupprimer);
+        buttons.add(btnAfficherCatalogue);
+        buttons.add(btnAfficherAlbums);
         buttons.add(btnAjouterArtiste);
-        buttons.add(btnSupprimerArtiste);
         buttons.add(btnAjouterGroupe);
+        buttons.add(btnAjouterAlbum);
+        buttons.add(btnAjouterMorceau);
+        buttons.add(btnSupprimerMorceau);
+        buttons.add(btnSupprimerAlbum);
+        buttons.add(btnSupprimerArtiste);
         buttons.add(btnSupprimerGroupe);
-        buttons.add(btnSuspendre);
+        buttons.add(btnSuspendreAbonne);
         buttons.add(btnSupprimerAbonne);
         buttons.add(btnStats);
         buttons.add(btnLogout);
 
         add(buttons, BorderLayout.SOUTH);
 
-        btnAfficher.addActionListener(e -> afficherCatalogue());
+        btnAfficherCatalogue.addActionListener(e -> afficherCatalogue());
 
-        btnAjouter.addActionListener(e -> {
-            String titre = champTitre.getText().trim();
+        btnAfficherAlbums.addActionListener(e -> afficherAlbums());
 
-            if (titre.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Titre requis.");
+        btnAjouterArtiste.addActionListener(e -> {
+            String nom = JOptionPane.showInputDialog(this, "Nom de l'artiste :");
+
+            if (nom == null || nom.trim().isEmpty()) {
                 return;
             }
 
-            String dureeStr = JOptionPane.showInputDialog(this, "Durée :");
-            if (dureeStr == null || dureeStr.trim().isEmpty()) {
+            boolean ok = controller.ajouterArtiste(nom.trim());
+
+            if (ok) {
+                JOptionPane.showMessageDialog(this, "Artiste ajouté.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Impossible d'ajouter l'artiste.");
+            }
+        });
+
+        btnAjouterGroupe.addActionListener(e -> {
+            String nom = JOptionPane.showInputDialog(this, "Nom du groupe :");
+
+            if (nom == null || nom.trim().isEmpty()) {
+                return;
+            }
+
+            boolean ok = controller.ajouterGroupe(nom.trim());
+
+            if (ok) {
+                JOptionPane.showMessageDialog(this, "Groupe ajouté.");
+            } else {
+                JOptionPane.showMessageDialog(this, "Impossible d'ajouter le groupe.");
+            }
+        });
+
+        btnAjouterAlbum.addActionListener(e -> {
+            String titre = JOptionPane.showInputDialog(this, "Titre de l'album :");
+            if (titre == null || titre.trim().isEmpty()) {
+                return;
+            }
+
+            String anneeTexte = JOptionPane.showInputDialog(this, "Année :");
+            if (anneeTexte == null || anneeTexte.trim().isEmpty()) {
+                return;
+            }
+
+            String[] options = {"Artiste", "Groupe"};
+            String type = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Type d'interprète :",
+                    "Choix de l'interprète",
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+
+            if (type == null) {
+                return;
+            }
+
+            String nomInterprete = JOptionPane.showInputDialog(this, "Nom de l'interprète :");
+            if (nomInterprete == null || nomInterprete.trim().isEmpty()) {
+                return;
+            }
+
+            try {
+                int annee = Integer.parseInt(anneeTexte.trim());
+                boolean ok = false;
+
+                if (type.equalsIgnoreCase("Artiste")) {
+                    ok = controller.ajouterAlbumAvecArtiste(
+                            titre.trim(),
+                            annee,
+                            nomInterprete.trim()
+                    );
+                } else if (type.equalsIgnoreCase("Groupe")) {
+                    ok = controller.ajouterAlbumAvecGroupe(
+                            titre.trim(),
+                            annee,
+                            nomInterprete.trim()
+                    );
+                }
+
+                if (ok) {
+                    JOptionPane.showMessageDialog(this, "Album ajouté.");
+                    afficherAlbums();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Impossible d'ajouter l'album.");
+                }
+
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "L'année doit être un entier.");
+            }
+        });
+
+        btnAjouterMorceau.addActionListener(e -> {
+            String titre = champTitre.getText().trim();
+
+            if (titre.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Titre du morceau requis.");
+                return;
+            }
+
+            String dureeTexte = JOptionPane.showInputDialog(this, "Durée :");
+            if (dureeTexte == null || dureeTexte.trim().isEmpty()) {
                 return;
             }
 
@@ -104,8 +206,13 @@ public class AdminPanel extends JPanel {
                 return;
             }
 
+            String titreAlbum = JOptionPane.showInputDialog(this, "Titre de l'album :");
+            if (titreAlbum == null || titreAlbum.trim().isEmpty()) {
+                return;
+            }
+
             try {
-                double duree = Double.parseDouble(dureeStr.trim());
+                double duree = Double.parseDouble(dureeTexte.trim());
                 boolean ok = false;
 
                 if (type.equalsIgnoreCase("Artiste")) {
@@ -113,14 +220,16 @@ public class AdminPanel extends JPanel {
                             titre,
                             duree,
                             genre.trim(),
-                            nomInterprete.trim()
+                            nomInterprete.trim(),
+                            titreAlbum.trim()
                     );
                 } else if (type.equalsIgnoreCase("Groupe")) {
                     ok = controller.ajouterMorceauAvecGroupe(
                             titre,
                             duree,
                             genre.trim(),
-                            nomInterprete.trim()
+                            nomInterprete.trim(),
+                            titreAlbum.trim()
                     );
                 }
 
@@ -131,7 +240,7 @@ public class AdminPanel extends JPanel {
                 } else {
                     JOptionPane.showMessageDialog(
                             this,
-                            "Impossible d'ajouter le morceau.\nVérifie que l'artiste ou le groupe existe déjà."
+                            "Impossible d'ajouter le morceau.\nVérifie que l'artiste/groupe et l'album existent et correspondent."
                     );
                 }
 
@@ -140,11 +249,11 @@ public class AdminPanel extends JPanel {
             }
         });
 
-        btnSupprimer.addActionListener(e -> {
+        btnSupprimerMorceau.addActionListener(e -> {
             String titre = champTitre.getText().trim();
 
             if (titre.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Saisis un titre à supprimer.");
+                JOptionPane.showMessageDialog(this, "Saisis un titre de morceau.");
                 return;
             }
 
@@ -159,19 +268,20 @@ public class AdminPanel extends JPanel {
             }
         });
 
-        btnAjouterArtiste.addActionListener(e -> {
-            String nom = JOptionPane.showInputDialog(this, "Nom de l'artiste :");
+        btnSupprimerAlbum.addActionListener(e -> {
+            String titre = JOptionPane.showInputDialog(this, "Titre de l'album à supprimer :");
 
-            if (nom == null || nom.trim().isEmpty()) {
+            if (titre == null || titre.trim().isEmpty()) {
                 return;
             }
 
-            boolean ok = controller.ajouterArtiste(nom.trim());
+            boolean ok = controller.supprimerAlbum(titre.trim());
 
             if (ok) {
-                JOptionPane.showMessageDialog(this, "Artiste ajouté.");
+                JOptionPane.showMessageDialog(this, "Album supprimé.");
+                afficherAlbums();
             } else {
-                JOptionPane.showMessageDialog(this, "Impossible d'ajouter l'artiste.");
+                JOptionPane.showMessageDialog(this, "Album introuvable.");
             }
         });
 
@@ -191,22 +301,6 @@ public class AdminPanel extends JPanel {
             }
         });
 
-        btnAjouterGroupe.addActionListener(e -> {
-            String nom = JOptionPane.showInputDialog(this, "Nom du groupe :");
-
-            if (nom == null || nom.trim().isEmpty()) {
-                return;
-            }
-
-            boolean ok = controller.ajouterGroupe(nom.trim());
-
-            if (ok) {
-                JOptionPane.showMessageDialog(this, "Groupe ajouté.");
-            } else {
-                JOptionPane.showMessageDialog(this, "Impossible d'ajouter le groupe.");
-            }
-        });
-
         btnSupprimerGroupe.addActionListener(e -> {
             String nom = JOptionPane.showInputDialog(this, "Nom du groupe à supprimer :");
 
@@ -223,7 +317,7 @@ public class AdminPanel extends JPanel {
             }
         });
 
-        btnSuspendre.addActionListener(e -> {
+        btnSuspendreAbonne.addActionListener(e -> {
             String login = JOptionPane.showInputDialog(this, "Login de l'abonné à suspendre :");
 
             if (login == null || login.trim().isEmpty()) {
@@ -274,9 +368,25 @@ public class AdminPanel extends JPanel {
             return;
         }
 
-        area.append("=== CATALOGUE ===\n");
+        area.append("=== CATALOGUE DES MORCEAUX ===\n");
         for (Morceau m : morceaux) {
-            area.append(m.toString() + "\n");
+            area.append(m + "\n");
+        }
+    }
+
+    private void afficherAlbums() {
+        area.setText("");
+
+        List<Album> albums = controller.getTousLesAlbums();
+
+        if (albums.isEmpty()) {
+            area.setText("Aucun album dans le catalogue.");
+            return;
+        }
+
+        area.append("=== CATALOGUE DES ALBUMS ===\n");
+        for (Album a : albums) {
+            area.append(a + "\n");
         }
     }
 
@@ -285,6 +395,8 @@ public class AdminPanel extends JPanel {
 
         area.append("=== STATISTIQUES ===\n");
         area.append("Utilisateurs : " + controller.getNombreUtilisateurs() + "\n");
+        area.append("Abonnés : " + controller.getNombreAbonnes() + "\n");
+        area.append("Administrateurs : " + controller.getNombreAdministrateurs() + "\n");
         area.append("Morceaux : " + controller.getNombreMorceaux() + "\n");
         area.append("Albums : " + controller.getNombreAlbums() + "\n");
         area.append("Artistes : " + controller.getNombreArtistes() + "\n");

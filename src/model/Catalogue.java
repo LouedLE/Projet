@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.io.Serializable;
 
 public class Catalogue implements Serializable {
+
     private List<Morceau> morceaux;
     private List<Album> albums;
     private List<Artiste> artistes;
@@ -33,44 +34,44 @@ public class Catalogue implements Serializable {
         return groupes;
     }
 
-    public void ajouterMorceau(Morceau m) {
-        if (!morceaux.contains(m)) {
-            morceaux.add(m);
+    public void ajouterMorceau(Morceau morceau) {
+        if (morceau != null && !morceaux.contains(morceau)) {
+            morceaux.add(morceau);
         }
     }
 
-    public void supprimerMorceau(Morceau m) {
-        morceaux.remove(m);
+    public void supprimerMorceau(Morceau morceau) {
+        morceaux.remove(morceau);
     }
 
-    public void ajouterAlbum(Album a) {
-        if (!albums.contains(a)) {
-            albums.add(a);
+    public void ajouterAlbum(Album album) {
+        if (album != null && !albums.contains(album)) {
+            albums.add(album);
         }
     }
 
-    public void supprimerAlbum(Album a) {
-        albums.remove(a);
+    public void supprimerAlbum(Album album) {
+        albums.remove(album);
     }
 
-    public void ajouterArtiste(Artiste a) {
-        if (!artistes.contains(a)) {
-            artistes.add(a);
+    public void ajouterArtiste(Artiste artiste) {
+        if (artiste != null && !artistes.contains(artiste)) {
+            artistes.add(artiste);
         }
     }
 
-    public void supprimerArtiste(Artiste a) {
-        artistes.remove(a);
+    public void supprimerArtiste(Artiste artiste) {
+        artistes.remove(artiste);
     }
 
-    public void ajouterGroupe(Groupe g) {
-        if (!groupes.contains(g)) {
-            groupes.add(g);
+    public void ajouterGroupe(Groupe groupe) {
+        if (groupe != null && !groupes.contains(groupe)) {
+            groupes.add(groupe);
         }
     }
 
-    public void supprimerGroupe(Groupe g) {
-        groupes.remove(g);
+    public void supprimerGroupe(Groupe groupe) {
+        groupes.remove(groupe);
     }
 
     public Morceau rechercherMorceauParTitre(String titre) {
@@ -125,9 +126,28 @@ public class Catalogue implements Serializable {
         return new ArrayList<>();
     }
 
+    public List<Album> rechercherAlbumsParArtiste(String nomArtiste) {
+        Artiste artiste = rechercherArtisteParNom(nomArtiste);
+        if (artiste != null) {
+            return artiste.getAlbums();
+        }
+        return new ArrayList<>();
+    }
+
+    public List<Album> rechercherAlbumsParGroupe(String nomGroupe) {
+        Groupe groupe = rechercherGroupeParNom(nomGroupe);
+        if (groupe != null) {
+            return groupe.getAlbums();
+        }
+        return new ArrayList<>();
+    }
 
     @Override
     public String toString() {
-        return "Catalogue{morceaux=" + morceaux.size() +  ", albums=" + albums.size() +  ", artistes=" + artistes.size() +  ", groupes=" + groupes.size() + "}";
+        return "Catalogue{morceaux=" + morceaux.size() +
+                ", albums=" + albums.size() +
+                ", artistes=" + artistes.size() +
+                ", groupes=" + groupes.size() +
+                '}';
     }
 }

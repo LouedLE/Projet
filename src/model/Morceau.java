@@ -14,27 +14,32 @@ public class Morceau implements Serializable {
 
     private Artiste artiste;
     private Groupe groupe;
+    private Album album;
 
-    private List<Avis> avis = new ArrayList<>();
+    private List<Avis> avis;
 
-    public Morceau(int id, String titre, double duree, String genre, Artiste artiste) {
+    public Morceau(int id, String titre, double duree, String genre, Artiste artiste, Album album) {
         this.id = id;
         this.titre = titre;
         this.duree = duree;
         this.genre = genre;
         this.artiste = artiste;
         this.groupe = null;
+        this.album = album;
         this.nombreEcoutes = 0;
+        this.avis = new ArrayList<>();
     }
 
-    public Morceau(int id, String titre, double duree, String genre, Groupe groupe) {
+    public Morceau(int id, String titre, double duree, String genre, Groupe groupe, Album album) {
         this.id = id;
         this.titre = titre;
         this.duree = duree;
         this.genre = genre;
-        this.groupe = groupe;
         this.artiste = null;
+        this.groupe = groupe;
+        this.album = album;
         this.nombreEcoutes = 0;
+        this.avis = new ArrayList<>();
     }
 
     public int getId() {
@@ -81,6 +86,10 @@ public class Morceau implements Serializable {
         return groupe;
     }
 
+    public Album getAlbum() {
+        return album;
+    }
+
     public String getNomInterprete() {
         if (artiste != null) {
             return artiste.getNom();
@@ -89,6 +98,16 @@ public class Morceau implements Serializable {
             return groupe.getNom();
         }
         return "Inconnu";
+    }
+
+    public String getTypeInterprete() {
+        if (artiste != null) {
+            return "artiste";
+        }
+        if (groupe != null) {
+            return "groupe";
+        }
+        return "inconnu";
     }
 
     public List<Avis> getAvis() {
@@ -103,15 +122,23 @@ public class Morceau implements Serializable {
                 return;
             }
         }
+
         avis.add(new Avis(abonne, note, commentaire));
     }
 
-    public void supprimerAvis(Abonne abonne) {
-        avis.removeIf(a -> a.getAuteurId() == abonne.getId());
+    public boolean supprimerAvis(Abonne abonne) {
+        return avis.removeIf(a -> a.getAuteurId() == abonne.getId());
     }
 
     @Override
     public String toString() {
-        return "Morceau{id=" + id + ", titre='" + titre + '\'' + ", duree=" + duree + ", genre='" + genre + '\'' + ", interprete='" + getNomInterprete() + '\'' + ", ecoutes=" + nombreEcoutes + '}';
+        return "Morceau{id=" + id +
+                ", titre='" + titre + '\'' +
+                ", duree=" + duree +
+                ", genre='" + genre + '\'' +
+                ", album='" + (album != null ? album.getTitre() : "Aucun") + '\'' +
+                ", interprete='" + getNomInterprete() + '\'' +
+                ", ecoutes=" + nombreEcoutes +
+                '}';
     }
 }
