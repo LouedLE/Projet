@@ -7,6 +7,7 @@ import model.Groupe;
 import model.Morceau;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
@@ -23,40 +24,62 @@ public class VisiteurPanel extends JPanel {
         this.frame = frame;
 
         setLayout(new BorderLayout());
+        setBackground(new Color(245, 247, 250));
+        setBorder(new EmptyBorder(15, 20, 15, 20));
 
         JLabel title = new JLabel("Mode Visiteur", SwingConstants.CENTER);
-        title.setFont(new Font("Arial", Font.BOLD, 20));
+        title.setFont(new Font("SansSerif", Font.BOLD, 24));
+        title.setForeground(new Color(40, 40, 40));
+        title.setBorder(new EmptyBorder(5, 5, 15, 5));
         add(title, BorderLayout.NORTH);
 
-        JPanel panelNord = new JPanel(new FlowLayout());
-        panelNord.add(new JLabel("Titre du morceau :"));
-        champTitre = new JTextField(20);
+        JPanel panelNord = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panelNord.setBackground(new Color(245, 247, 250));
+
+        JLabel labelTitre = new JLabel("Titre du morceau :");
+        labelTitre.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        panelNord.add(labelTitre);
+
+        champTitre = new JTextField(22);
+        champTitre.setFont(new Font("SansSerif", Font.PLAIN, 14));
         panelNord.add(champTitre);
+
         add(panelNord, BorderLayout.BEFORE_FIRST_LINE);
 
         area = new JTextArea();
         area.setEditable(false);
+        area.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        area.setBackground(Color.WHITE);
+        area.setForeground(new Color(30, 30, 30));
+        area.setMargin(new Insets(12, 12, 12, 12));
+
         JScrollPane scrollPane = new JScrollPane(area);
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+                new EmptyBorder(0, 0, 0, 0)
+        ));
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel buttons = new JPanel(new GridLayout(5, 3, 8, 8));
+        JPanel buttons = new JPanel(new GridLayout(5, 3, 10, 10));
+        buttons.setBackground(new Color(245, 247, 250));
+        buttons.setBorder(new EmptyBorder(15, 0, 0, 0));
 
-        JButton btnAfficherCatalogue = new JButton("Voir morceaux");
-        JButton btnAfficherAlbums = new JButton("Voir albums");
-        JButton btnRechercherMorceau = new JButton("Rechercher morceau");
-        JButton btnRechercherAlbum = new JButton("Rechercher album");
-        JButton btnEcouter = new JButton("Écouter (limité)");
-        JButton btnVoirInterprete = new JButton("Voir interprète");
-        JButton btnVoirMemeInterprete = new JButton("Même interprète");
-        JButton btnVoirInfosArtiste = new JButton("Infos artiste");
-        JButton btnVoirInfosGroupe = new JButton("Infos groupe");
-        JButton btnVoirMorceauxArtiste = new JButton("Morceaux artiste");
-        JButton btnVoirMorceauxGroupe = new JButton("Morceaux groupe");
-        JButton btnVoirAlbumsArtiste = new JButton("Albums artiste");
-        JButton btnVoirAlbumsGroupe = new JButton("Albums groupe");
-        JButton btnVoirDetailsAlbum = new JButton("Détails album");
-        JButton btnRetour = new JButton("Retour");
-        JButton btnQuitter = new JButton("Quitter");
+        JButton btnAfficherCatalogue = creerBouton("Voir morceaux");
+        JButton btnAfficherAlbums = creerBouton("Voir albums");
+        JButton btnRechercherMorceau = creerBouton("Rechercher morceau");
+        JButton btnRechercherAlbum = creerBouton("Rechercher album");
+        JButton btnEcouter = creerBouton("Écouter (limité)");
+        JButton btnVoirInterprete = creerBouton("Voir interprète");
+        JButton btnVoirMemeInterprete = creerBouton("Même interprète");
+        JButton btnVoirInfosArtiste = creerBouton("Infos artiste");
+        JButton btnVoirInfosGroupe = creerBouton("Infos groupe");
+        JButton btnVoirMorceauxArtiste = creerBouton("Morceaux artiste");
+        JButton btnVoirMorceauxGroupe = creerBouton("Morceaux groupe");
+        JButton btnVoirAlbumsArtiste = creerBouton("Albums artiste");
+        JButton btnVoirAlbumsGroupe = creerBouton("Albums groupe");
+        JButton btnVoirDetailsAlbum = creerBouton("Détails album");
+        JButton btnRetour = creerBouton("Retour");
+        JButton btnQuitter = creerBoutonRouge("Quitter");
 
         buttons.add(btnAfficherCatalogue);
         buttons.add(btnAfficherAlbums);
@@ -77,6 +100,8 @@ public class VisiteurPanel extends JPanel {
         add(buttons, BorderLayout.SOUTH);
 
         JPanel panelEst = new JPanel(new BorderLayout());
+        panelEst.setBackground(new Color(245, 247, 250));
+        panelEst.setBorder(new EmptyBorder(15, 10, 0, 0));
         panelEst.add(btnQuitter, BorderLayout.NORTH);
         add(panelEst, BorderLayout.EAST);
 
@@ -342,6 +367,26 @@ public class VisiteurPanel extends JPanel {
             controller.sauvegarder();
             System.exit(0);
         });
+    }
+
+    private JButton creerBouton(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        bouton.setBackground(new Color(52, 120, 246));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        return bouton;
+    }
+
+    private JButton creerBoutonRouge(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        bouton.setBackground(new Color(220, 53, 69));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        return bouton;
     }
 
     private void afficherCatalogue() {

@@ -6,6 +6,7 @@ import model.Album;
 import model.Morceau;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
@@ -23,36 +24,60 @@ public class AdminPanel extends JPanel {
         this.frame = frame;
 
         setLayout(new BorderLayout());
+        setBackground(new Color(245, 247, 250));
+        setBorder(new EmptyBorder(15, 20, 15, 20));
 
         JLabel title = new JLabel("Menu Admin - " + admin.getNomUtilisateur(), SwingConstants.CENTER);
+        title.setFont(new Font("SansSerif", Font.BOLD, 24));
+        title.setForeground(new Color(40, 40, 40));
+        title.setBorder(new EmptyBorder(5, 5, 15, 5));
         add(title, BorderLayout.NORTH);
 
-        JPanel top = new JPanel(new FlowLayout());
-        top.add(new JLabel("Titre :"));
-        champTitre = new JTextField(20);
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        top.setBackground(new Color(245, 247, 250));
+
+        JLabel labelTitre = new JLabel("Titre :");
+        labelTitre.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        top.add(labelTitre);
+
+        champTitre = new JTextField(22);
+        champTitre.setFont(new Font("SansSerif", Font.PLAIN, 14));
         top.add(champTitre);
+
         add(top, BorderLayout.BEFORE_FIRST_LINE);
 
         area = new JTextArea();
         area.setEditable(false);
-        add(new JScrollPane(area), BorderLayout.CENTER);
+        area.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        area.setBackground(Color.WHITE);
+        area.setForeground(new Color(30, 30, 30));
+        area.setMargin(new Insets(12, 12, 12, 12));
 
-        JPanel buttons = new JPanel(new GridLayout(5, 3, 8, 8));
+        JScrollPane scrollPane = new JScrollPane(area);
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+                new EmptyBorder(0, 0, 0, 0)
+        ));
+        add(scrollPane, BorderLayout.CENTER);
 
-        JButton btnAfficherCatalogue = new JButton("Voir catalogue");
-        JButton btnAfficherAlbums = new JButton("Voir albums");
-        JButton btnAjouterArtiste = new JButton("Ajouter artiste");
-        JButton btnAjouterGroupe = new JButton("Ajouter groupe");
-        JButton btnAjouterAlbum = new JButton("Ajouter album");
-        JButton btnAjouterMorceau = new JButton("Ajouter morceau");
-        JButton btnSupprimerMorceau = new JButton("Supprimer morceau");
-        JButton btnSupprimerAlbum = new JButton("Supprimer album");
-        JButton btnSupprimerArtiste = new JButton("Supprimer artiste");
-        JButton btnSupprimerGroupe = new JButton("Supprimer groupe");
-        JButton btnSuspendreAbonne = new JButton("Suspendre abonné");
-        JButton btnSupprimerAbonne = new JButton("Supprimer abonné");
-        JButton btnStats = new JButton("Statistiques");
-        JButton btnLogout = new JButton("Déconnexion");
+        JPanel buttons = new JPanel(new GridLayout(5, 3, 10, 10));
+        buttons.setBackground(new Color(245, 247, 250));
+        buttons.setBorder(new EmptyBorder(15, 0, 0, 0));
+
+        JButton btnAfficherCatalogue = creerBouton("Voir catalogue");
+        JButton btnAfficherAlbums = creerBouton("Voir albums");
+        JButton btnAjouterArtiste = creerBouton("Ajouter artiste");
+        JButton btnAjouterGroupe = creerBouton("Ajouter groupe");
+        JButton btnAjouterAlbum = creerBouton("Ajouter album");
+        JButton btnAjouterMorceau = creerBouton("Ajouter morceau");
+        JButton btnSupprimerMorceau = creerBouton("Supprimer morceau");
+        JButton btnSupprimerAlbum = creerBouton("Supprimer album");
+        JButton btnSupprimerArtiste = creerBouton("Supprimer artiste");
+        JButton btnSupprimerGroupe = creerBouton("Supprimer groupe");
+        JButton btnSuspendreAbonne = creerBouton("Suspendre abonné");
+        JButton btnSupprimerAbonne = creerBouton("Supprimer abonné");
+        JButton btnStats = creerBouton("Statistiques");
+        JButton btnLogout = creerBoutonRouge("Déconnexion");
 
         buttons.add(btnAfficherCatalogue);
         buttons.add(btnAfficherAlbums);
@@ -356,6 +381,26 @@ public class AdminPanel extends JPanel {
             frame.revalidate();
             frame.repaint();
         });
+    }
+
+    private JButton creerBouton(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        bouton.setBackground(new Color(52, 120, 246));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        return bouton;
+    }
+
+    private JButton creerBoutonRouge(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        bouton.setBackground(new Color(220, 53, 69));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        return bouton;
     }
 
     private void afficherCatalogue() {

@@ -6,6 +6,7 @@ import model.Administrateur;
 import model.Utilisateur;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 public class LoginPanel extends JPanel {
@@ -13,29 +14,54 @@ public class LoginPanel extends JPanel {
     public LoginPanel(JavazicController controller, JFrame frame) {
 
         setLayout(new BorderLayout());
+        setBackground(new Color(245, 247, 250));
+        setBorder(new EmptyBorder(30, 40, 30, 40));
 
         JLabel titre = new JLabel("Bienvenue sur JAVAZIC", SwingConstants.CENTER);
-        titre.setFont(new Font("Arial", Font.BOLD, 22));
+        titre.setFont(new Font("SansSerif", Font.BOLD, 28));
+        titre.setForeground(new Color(40, 40, 40));
+        titre.setBorder(new EmptyBorder(10, 10, 30, 10));
         add(titre, BorderLayout.NORTH);
 
-        JPanel centre = new JPanel(new GridLayout(3, 2, 10, 10));
+        JPanel centreWrapper = new JPanel(new GridBagLayout());
+        centreWrapper.setBackground(new Color(245, 247, 250));
+
+        JPanel centre = new JPanel(new GridLayout(2, 2, 15, 15));
+        centre.setBackground(Color.WHITE);
+        centre.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1),
+                new EmptyBorder(25, 25, 25, 25)
+        ));
+        centre.setPreferredSize(new Dimension(420, 130));
+
+        JLabel labelLogin = new JLabel("Login :");
+        labelLogin.setFont(new Font("SansSerif", Font.PLAIN, 15));
 
         JTextField login = new JTextField();
-        JPasswordField mdp = new JPasswordField();
+        login.setFont(new Font("SansSerif", Font.PLAIN, 15));
 
-        centre.add(new JLabel("Login :"));
+        JLabel labelMdp = new JLabel("Mot de passe :");
+        labelMdp.setFont(new Font("SansSerif", Font.PLAIN, 15));
+
+        JPasswordField mdp = new JPasswordField();
+        mdp.setFont(new Font("SansSerif", Font.PLAIN, 15));
+
+        centre.add(labelLogin);
         centre.add(login);
-        centre.add(new JLabel("Mot de passe :"));
+        centre.add(labelMdp);
         centre.add(mdp);
 
-        add(centre, BorderLayout.CENTER);
+        centreWrapper.add(centre);
+        add(centreWrapper, BorderLayout.CENTER);
 
-        JPanel boutons = new JPanel(new GridLayout(2, 2, 10, 10));
+        JPanel boutons = new JPanel(new GridLayout(2, 2, 15, 15));
+        boutons.setBackground(new Color(245, 247, 250));
+        boutons.setBorder(new EmptyBorder(25, 80, 10, 80));
 
-        JButton btnLogin = new JButton("Connexion");
-        JButton btnCreerCompte = new JButton("Créer un compte");
-        JButton btnVisiteur = new JButton("Continuer en tant que visiteur");
-        JButton btnQuitter = new JButton("Quitter");
+        JButton btnLogin = creerBouton("Connexion");
+        JButton btnCreerCompte = creerBouton("Créer un compte");
+        JButton btnVisiteur = creerBouton("Continuer en tant que visiteur");
+        JButton btnQuitter = creerBouton("Quitter");
 
         boutons.add(btnLogin);
         boutons.add(btnCreerCompte);
@@ -96,7 +122,17 @@ public class LoginPanel extends JPanel {
 
         btnQuitter.addActionListener(e -> {
             controller.sauvegarder();
-            frame.dispose();
+            System.exit(0);
         });
+    }
+
+    private JButton creerBouton(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 14));
+        bouton.setBackground(new Color(52, 120, 246));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(12, 18, 12, 18));
+        return bouton;
     }
 }

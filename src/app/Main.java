@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-
     public static void main(String[] args) {
         SystemeJavazic systeme = SystemeJavazic.charger("sauvegarde.dat");
         JavazicController controller = new JavazicController(systeme);

@@ -10,6 +10,7 @@ import model.Morceau;
 import model.Playlist;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.List;
 
@@ -28,52 +29,75 @@ public class AbonnePanel extends JPanel {
         this.frame = frame;
 
         setLayout(new BorderLayout());
+        setBackground(new Color(245, 247, 250));
+        setBorder(new EmptyBorder(15, 20, 15, 20));
 
         JLabel title = new JLabel("Menu Abonné - " + abonne.getNomUtilisateur(), SwingConstants.CENTER);
+        title.setFont(new Font("SansSerif", Font.BOLD, 24));
+        title.setForeground(new Color(40, 40, 40));
+        title.setBorder(new EmptyBorder(5, 5, 15, 5));
         add(title, BorderLayout.NORTH);
 
-        JPanel panelNord = new JPanel(new FlowLayout());
-        panelNord.add(new JLabel("Titre du morceau :"));
-        champTitre = new JTextField(20);
+        JPanel panelNord = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        panelNord.setBackground(new Color(245, 247, 250));
+
+        JLabel labelTitre = new JLabel("Titre du morceau :");
+        labelTitre.setFont(new Font("SansSerif", Font.PLAIN, 14));
+        panelNord.add(labelTitre);
+
+        champTitre = new JTextField(22);
+        champTitre.setFont(new Font("SansSerif", Font.PLAIN, 14));
         panelNord.add(champTitre);
+
         add(panelNord, BorderLayout.BEFORE_FIRST_LINE);
 
         area = new JTextArea();
         area.setEditable(false);
+        area.setFont(new Font("Monospaced", Font.PLAIN, 13));
+        area.setBackground(Color.WHITE);
+        area.setForeground(new Color(30, 30, 30));
+        area.setMargin(new Insets(12, 12, 12, 12));
+
         JScrollPane scrollPane = new JScrollPane(area);
+        scrollPane.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(210, 210, 210), 1),
+                new EmptyBorder(0, 0, 0, 0)
+        ));
         add(scrollPane, BorderLayout.CENTER);
 
-        JPanel buttons = new JPanel(new GridLayout(8, 3, 8, 8));
+        JPanel buttons = new JPanel(new GridLayout(8, 3, 10, 10));
+        buttons.setBackground(new Color(245, 247, 250));
+        buttons.setBorder(new EmptyBorder(15, 0, 0, 0));
 
-        JButton btnAfficherCatalogue = new JButton("Voir morceaux");
-        JButton btnAfficherAlbums = new JButton("Voir albums");
-        JButton btnRechercherMorceau = new JButton("Rechercher morceau");
-        JButton btnRechercherAlbum = new JButton("Rechercher album");
-        JButton btnEcouter = new JButton("Écouter");
-        JButton btnVoirInterprete = new JButton("Voir interprète");
-        JButton btnVoirMemeInterprete = new JButton("Même interprète");
+        JButton btnAfficherCatalogue = creerBouton("Voir morceaux");
+        JButton btnAfficherAlbums = creerBouton("Voir albums");
+        JButton btnRechercherMorceau = creerBouton("Rechercher morceau");
+        JButton btnRechercherAlbum = creerBouton("Rechercher album");
+        JButton btnEcouter = creerBouton("Écouter");
+        JButton btnVoirInterprete = creerBouton("Voir interprète");
+        JButton btnVoirMemeInterprete = creerBouton("Même interprète");
 
-        JButton btnCreerPlaylist = new JButton("Créer playlist");
-        JButton btnVoirPlaylists = new JButton("Voir playlists");
-        JButton btnRenommerPlaylist = new JButton("Renommer playlist");
-        JButton btnSupprimerPlaylist = new JButton("Supprimer playlist");
-        JButton btnAjouterMorceauPlaylist = new JButton("Ajouter à playlist");
-        JButton btnRetirerMorceauPlaylist = new JButton("Retirer de playlist");
+        JButton btnCreerPlaylist = creerBouton("Créer playlist");
+        JButton btnVoirPlaylists = creerBouton("Voir playlists");
+        JButton btnRenommerPlaylist = creerBouton("Renommer playlist");
+        JButton btnSupprimerPlaylist = creerBouton("Supprimer playlist");
+        JButton btnAjouterMorceauPlaylist = creerBouton("Ajouter à playlist");
+        JButton btnRetirerMorceauPlaylist = creerBouton("Retirer de playlist");
 
-        JButton btnAjouterAvis = new JButton("Ajouter / modifier avis");
-        JButton btnVoirAvis = new JButton("Voir avis");
-        JButton btnSupprimerAvis = new JButton("Supprimer mon avis");
-        JButton btnVoirHistorique = new JButton("Voir historique");
+        JButton btnAjouterAvis = creerBouton("Ajouter / modifier avis");
+        JButton btnVoirAvis = creerBouton("Voir avis");
+        JButton btnSupprimerAvis = creerBouton("Supprimer mon avis");
+        JButton btnVoirHistorique = creerBouton("Voir historique");
 
-        JButton btnVoirInfosArtiste = new JButton("Infos artiste");
-        JButton btnVoirInfosGroupe = new JButton("Infos groupe");
-        JButton btnVoirMorceauxArtiste = new JButton("Morceaux artiste");
-        JButton btnVoirMorceauxGroupe = new JButton("Morceaux groupe");
-        JButton btnVoirAlbumsArtiste = new JButton("Albums artiste");
-        JButton btnVoirAlbumsGroupe = new JButton("Albums groupe");
-        JButton btnVoirDetailsAlbum = new JButton("Détails album");
+        JButton btnVoirInfosArtiste = creerBouton("Infos artiste");
+        JButton btnVoirInfosGroupe = creerBouton("Infos groupe");
+        JButton btnVoirMorceauxArtiste = creerBouton("Morceaux artiste");
+        JButton btnVoirMorceauxGroupe = creerBouton("Morceaux groupe");
+        JButton btnVoirAlbumsArtiste = creerBouton("Albums artiste");
+        JButton btnVoirAlbumsGroupe = creerBouton("Albums groupe");
+        JButton btnVoirDetailsAlbum = creerBouton("Détails album");
 
-        JButton btnLogout = new JButton("Déconnexion");
+        JButton btnLogout = creerBoutonRouge("Déconnexion");
 
         buttons.add(btnAfficherCatalogue);
         buttons.add(btnAfficherAlbums);
@@ -519,6 +543,26 @@ public class AbonnePanel extends JPanel {
             frame.revalidate();
             frame.repaint();
         });
+    }
+
+    private JButton creerBouton(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        bouton.setBackground(new Color(52, 120, 246));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        return bouton;
+    }
+
+    private JButton creerBoutonRouge(String texte) {
+        JButton bouton = new JButton(texte);
+        bouton.setFocusPainted(false);
+        bouton.setFont(new Font("SansSerif", Font.BOLD, 13));
+        bouton.setBackground(new Color(220, 53, 69));
+        bouton.setForeground(Color.WHITE);
+        bouton.setBorder(BorderFactory.createEmptyBorder(10, 14, 10, 14));
+        return bouton;
     }
 
     private void afficherCatalogue() {
